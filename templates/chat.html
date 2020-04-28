@@ -9,7 +9,29 @@
 <body>
     <h1>Welcome, {{ username }}</h1>
     <div>
-        {{ chat_messages }}
+        <form method="POST">
+            <textarea cols="50" rows="4" name="message" id="message-textarea"></textarea>
+            <br>
+            <button>Send Message</button>
+        </form>
     </div>
+    <div>
+        {% for message in chat_messages %}
+        <p>({{message.timestamp}}) {{message.from}}: {{message.message}}</p>
+        {% endfor %}
+    </div>
+<script>
+    let messageBox = document.getElementById("message-textarea")
+
+    let timer = setTimeout(function(){
+        location.reload();
+    },5000)
+    messageBox.onkeydown = function(e){
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+            location.reload();
+        },5000)
+    }
+</script>
 </body>
 </html>
