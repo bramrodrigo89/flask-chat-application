@@ -6,14 +6,12 @@ app = Flask(__name__)
 app.secret_key="randomString123"
 messages=[]
 
-def add_message(username, message):
-    """Add messages to the messages' list"""
-    now = datetime.now().strftime("%H:%M:%S")
-    messages.append("({}) {}: {}".format(now,username,message))
 
-def get_all_messages():
-    """Gets all messages and separates them with a <br> tag"""
-    return "<br>".join(messages)
+def add_message(username, message):
+    """Add messages to the messages' list in dictionary form"""
+    now = datetime.now().strftime("%H:%M:%S")
+    messages_dict={"timestamp":now, "from":username, "message":message}
+    messages.append(messages_dict)
 
 @app.route("/", methods=["POST","GET"])
 def index():
@@ -22,13 +20,12 @@ def index():
         session["username"]=request.form["username"]
     if "username" in session:
         return redirect(session["username"])
-        
     return render_template("index.html")
 
 @app.route("/<username>")
 def user(username):
     """Welcome user and display stored messages"""
-    return "<h1>Welcome, {0}</h1>{1}".format(username,get_all_messages())
+    return render_template("chat.html", username=username, chat_messages=messages)
 
 @app.route("/<username>/<message>")
 def send_message(username, message):
