@@ -32,6 +32,6 @@ def user(username):
     return render_template("chat.html", username=username, chat_messages=messages)
 
 if __name__=="__main__":
-    app.run(host=os.getenv("IP","0.0.0.0."),
+    app.run(host=os.getenv("IP","0.0.0.0"),
         port=int(os.getenv("PORT","5000")),
         debug=False)
